@@ -107,6 +107,10 @@ app.post('/send', async (req, res) => {
   }
 });
 
+app.get('/',(req, res)=>{
+  res.send("Hello");
+})
+
 
 app.listen(port, () => {
   try{
