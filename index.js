@@ -55,6 +55,7 @@ app.get('/receive', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const {username, password, displayName} = req.body;
+  const sftp = new SFTPClient();
   try {
     await sftp.connect({
       host: sftpConfig.host,
@@ -70,6 +71,7 @@ app.post('/login', async (req, res) => {
     const response = {
       status: false, message: "Invalid Credentials", err: err
     }
+    console.log(err);
     res.json(response);
   }
 
