@@ -53,6 +53,29 @@ app.get('/receive', async (req, res) => {
 });
 
 
+app.post('/login', async (req, res) => {
+  const {username, password, displayName} = req.body;
+  try {
+    await sftp.connect({
+      host: sftpConfig.host,
+      port: sftpConfig.port,
+      username: username,
+      password: password,
+    });
+    const response = {
+      status: true, message: "Valid Credentials"
+    }
+    res.json(response);
+  } catch (err) {
+    const response = {
+      status: false, message: "Invalid Credentials", err: err
+    }
+    res.json(response);
+  }
+
+});
+
+
 
 
 // Route to send message to B
