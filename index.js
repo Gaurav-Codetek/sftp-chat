@@ -1,9 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const SFTPClient = require('ssh2-sftp-client');
-const sftpConfig = require('./sftp-config');
 const cors = require('cors');
 const app = express();
 const port = 3000;
+
+const sftpConfig = {
+  host: process.env.host,
+  port: parseInt(process.env.port),
+  username: process.env.username,
+  password:process.env.password,
+}
 
 app.use(cors());
 app.use(express.json()); // to parse JSON body
@@ -11,8 +18,8 @@ app.use(express.json()); // to parse JSON body
 // Route to receive messages from B
 app.get('/receive', async (req, res) => {
   const sftp = new SFTPClient();
-  const remoteFilePath1 = `/home/ftpuser/uploads/AtoB.txt`;
-  const remoteFilePath2 = `/home/ftpuser2/uploads/AtoB.txt`;
+  const remoteFilePath1 = `${process.env.remoteFilePath1}`;
+  const remoteFilePath2 = `${process.env.remoteFilePath2}`;
 
   try {
     await sftp.connect(sftpConfig);
@@ -102,5 +109,10 @@ app.post('/send', async (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  try{
+    console.log(`Server running at http://localhost:${port}`);
+  }
+  catch(err){
+    console.log(err);
+  }
 });
